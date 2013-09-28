@@ -61,4 +61,30 @@ describe "Votes" do
       parsed['count'].should == 1
     end
   end
+
+  describe "GET /votes/ranking" do
+    before :each do
+      @another_vote = Fabricate(:vote, category: 'another', name: 'first')
+      @first_vote = Fabricate(:vote, category: 'category', name: 'first')
+      @second_vote = Fabricate(:vote, category: 'category', name: 'second')
+    end
+
+    it "generates error" do
+      get ranking_votes_path(format: :json)
+      parsed = JSON.parse response.body
+      parsed['message'].should == 'NG'
+    end
+
+    it "generates rankinging json" do
+      get ranking_votes_path(category: 'category', format: :json)
+      parsed = JSON.parse response.body
+      parsed['message'].should == 'OK'
+      parsed['ranking'].should be_a Array
+      parsed['ranking'][0]['name'].should == 'name'
+      get ranking_votes_path(category: 'another', format: :json)
+      parsed = JSON.parse response.body
+      parsed['message'].should == 'OK'
+      parsed['ranking'].should be_a Array
+    end
+  end
 end

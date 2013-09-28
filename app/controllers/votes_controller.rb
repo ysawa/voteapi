@@ -34,7 +34,26 @@ class VotesController < ApplicationController
 
   # GET /votes/ranking.json
   def ranking
-    @votes = Vote.category(params[:category])
+    @votes = Vote.category(params[:category]).asc(:created_at).only(:category, :name, :created_at)
+    @ranking_hash = {}
+    @votes.each do |vote|
+      element = @ranking_hash[vote.name] || { name: vote.name, count: 0, position: 1 }
+      element[:updated_at] = vote.created_at
+      element[:count] += 1
+      @ranking_hash[vote.name] = element
+    end
+    @ranking = @ranking_hash.values.sort do |a, b|
+      b[:count] <=> a[:count]
+    end
+    past_ranking = nil
+    @ranking.each_with_index do |element, i|
+      if past_ranking == element
+        element[:position] = past_ranking[:position]
+      else
+        element[:position] = i + 1
+      end
+      past_ranking = element
+    end
   end
 
 private

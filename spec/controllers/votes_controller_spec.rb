@@ -63,6 +63,13 @@ describe VotesController do
       assigns(:votes).should include @second_vote
       assigns(:votes).should include @third_vote
       assigns(:votes).should_not include @another_vote
+      assigns(:ranking).should be_a Array
+      ranking = assigns(:ranking)
+      ranking[0].should be_a Hash
+      ranking[0][:name].should == 'first'
+      ranking[0][:count].should == 2
+      ranking[1][:name].should == 'second'
+      ranking[1][:count].should == 1
     end
   end
 
