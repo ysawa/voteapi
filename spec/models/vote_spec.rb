@@ -2,6 +2,24 @@ require 'spec_helper'
 
 describe Vote do
 
+  describe '#category' do
+    it 'validates the presence' do
+      vote = Fabricate.build(:vote, category: nil)
+      vote.should_not be_valid
+      vote.category = 'category'
+      vote.should be_valid
+    end
+  end
+
+  describe '#name' do
+    it 'validates the presence' do
+      vote = Fabricate.build(:vote, name: nil)
+      vote.should_not be_valid
+      vote.name = 'name'
+      vote.should be_valid
+    end
+  end
+
   describe '#initialize' do
     it 'build new object' do
       vote = Vote.new
@@ -85,6 +103,19 @@ describe Vote do
     it 'finds the last vote from category' do
       Vote.last_one(@vote.category).should == @vote
       Vote.last_one(@another_vote.category).should == @another_vote
+    end
+  end
+
+  describe '.of_name' do
+
+    before :each do
+      @another_vote = Fabricate(:vote, name: 'another')
+      @vote = Fabricate(:vote, name: 'vote')
+    end
+
+    it 'finds the last vote' do
+      Vote.of_name('vote').to_a.should == [@vote]
+      Vote.of_name('another').to_a.should == [@another_vote]
     end
   end
 end

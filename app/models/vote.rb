@@ -5,7 +5,8 @@ class Vote
   field :name, type: String
   field :remote_ip, type: String
   field :user_agent, type: String
-  validate :category
+  validates :category, presence: true
+  validates :name, presence: true
 
   index category: 1
   index created_at: 1
@@ -34,6 +35,10 @@ class Vote
         criteria = self
       end
       criteria.desc(:created_at).first
+    end
+
+    def of_name(name)
+      where(name: name)
     end
   end
 end

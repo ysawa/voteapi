@@ -5,13 +5,30 @@ describe VotesController do
   # This should return the minimal set of attributes required to create a valid
   # Vote. As you add validations to Vote, be sure to
   # adjust the attributes here as well.
-  let(:valid_attributes) { { "category" => "MyString" } }
+  let(:valid_attributes) { { "category" => "category", "name" => 'name' } }
 
   describe "GET index" do
     it "assigns all votes as @votes" do
       vote = Vote.create! valid_attributes
       get :index, { format: 'json' }
       assigns(:votes).should eq([vote])
+    end
+  end
+
+  describe "GET count" do
+    before :each do
+      @another_vote = Fabricate(:vote, category: 'another')
+      @first_vote = Fabricate(:vote, category: 'category', name: 'first')
+      @second_vote = Fabricate(:vote, category: 'category', name: 'second')
+      @third_vote = Fabricate(:vote, category: 'category', name: 'first')
+    end
+
+    it "assigns all votes as @votes" do
+      get :count, { category: 'category', format: 'json' }
+      assigns(:votes).should include @first_vote
+      assigns(:votes).should include @second_vote
+      assigns(:votes).should include @third_vote
+      assigns(:votes).should_not include @another_vote
     end
   end
 

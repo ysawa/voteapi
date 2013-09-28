@@ -5,3 +5,4 @@ json.set! :votes do
 end
 json.set! :category, params[:category]
 json.set! :count, @votes.count
+json.set! :message, "OK"

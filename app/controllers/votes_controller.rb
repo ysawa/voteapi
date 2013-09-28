@@ -2,6 +2,15 @@ class VotesController < ApplicationController
   respond_to :json
   before_action :set_vote, only: []
 
+  # GET /votes/count.json
+  def count
+    if params[:category]
+      @votes = Vote.category(params[:category])
+    else
+      @votes = Vote.all
+    end
+  end
+
   # POST /votes.json
   def create
     @vote = Vote.new(vote_params)
@@ -10,9 +19,9 @@ class VotesController < ApplicationController
 
     respond_to do |format|
       if !@vote.suspicious? && @vote.save
-        format.json { render action: 'show', status: :created, location: @vote }
+        format.json { render json: { message: 'OK' }, status: :created }
       else
-        format.json { render json: @vote.errors, status: :unprocessable_entity }
+        format.json { render json: { errors: @vote.errors, message: 'NG' }, status: :unprocessable_entity }
       end
     end
   end
@@ -23,6 +32,10 @@ class VotesController < ApplicationController
       @votes = Vote.category(params[:category])
     else
       @votes = Vote.all
+    end
+
+    if params[:name]
+      @votes = @vote.of_name(params[:name])
     end
   end
 
