@@ -43,6 +43,7 @@ describe "Votes" do
       @first_vote = Fabricate(:vote, category: 'category')
       @second_vote = Fabricate(:vote, category: 'category')
     end
+
     it "generates error" do
       get count_votes_path(format: :json)
       parsed = JSON.parse response.body

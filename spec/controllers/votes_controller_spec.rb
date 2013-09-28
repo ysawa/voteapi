@@ -8,6 +8,13 @@ describe VotesController do
   let(:valid_attributes) { { "category" => "category", "name" => 'name' } }
 
   describe "GET index" do
+
+    it "fails without category" do
+      vote = Vote.create! valid_attributes
+      get :index, { format: 'json' }
+      response.should_not be_success
+    end
+
     it "assigns all votes as @votes" do
       vote = Vote.create! valid_attributes
       get :index, { category: 'category', format: 'json' }
@@ -21,6 +28,11 @@ describe VotesController do
       @first_vote = Fabricate(:vote, category: 'category', name: 'first')
       @second_vote = Fabricate(:vote, category: 'category', name: 'second')
       @third_vote = Fabricate(:vote, category: 'category', name: 'first')
+    end
+
+    it "fails without category" do
+      get :count, { format: 'json' }
+      response.should_not be_success
     end
 
     it "assigns all votes as @votes" do
@@ -38,6 +50,11 @@ describe VotesController do
       @first_vote = Fabricate(:vote, category: 'category', name: 'first')
       @second_vote = Fabricate(:vote, category: 'category', name: 'second')
       @third_vote = Fabricate(:vote, category: 'category', name: 'first')
+    end
+
+    it "fails without category" do
+      get :ranking, { format: 'json' }
+      response.should_not be_success
     end
 
     it "assigns all votes as @votes" do
