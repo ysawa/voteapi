@@ -2,17 +2,14 @@ require 'spec_helper'
 
 describe "Votes" do
   describe "GET /votes" do
-    it "works! (now write some real specs)" do
-      # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
+    it "errors" do
       get votes_path(format: :json)
-      response.status.should be(200)
+      response.status.should be(403)
     end
-  end
 
-  describe "POST /votes" do
-    it "works! (now write some real specs)" do
-      # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
-      get votes_path(format: :json)
+    it "works with the vote category" do
+      @vote = Fabricate(:vote)
+      get votes_path(category: @vote.category, format: :json)
       response.status.should be(200)
     end
   end

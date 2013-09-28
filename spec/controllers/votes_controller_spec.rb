@@ -10,7 +10,7 @@ describe VotesController do
   describe "GET index" do
     it "assigns all votes as @votes" do
       vote = Vote.create! valid_attributes
-      get :index, { format: 'json' }
+      get :index, { category: 'category', format: 'json' }
       assigns(:votes).should eq([vote])
     end
   end

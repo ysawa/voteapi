@@ -1,13 +1,12 @@
 class VotesController < ApplicationController
   respond_to :json
   before_action :set_vote, only: []
+  before_action :set_votes_by_category, only: %i(count index ranking)
 
   # GET /votes/count.json
   def count
-    if params[:category]
-      @votes = Vote.category(params[:category])
-    else
-      @votes = Vote.all
+    if params[:name]
+      @votes = @votes.of_name(params[:name])
     end
   end
 
@@ -28,14 +27,8 @@ class VotesController < ApplicationController
 
   # GET /votes.json
   def index
-    if params[:category]
-      @votes = Vote.category(params[:category])
-    else
-      @votes = Vote.all
-    end
-
     if params[:name]
-      @votes = @vote.of_name(params[:name])
+      @votes = @votes.of_name(params[:name])
     end
   end
 
@@ -48,6 +41,14 @@ private
   # Use callbacks to share common setup or constraints between actions.
   def set_vote
     @vote = Vote.find(params[:id])
+  end
+
+  def set_votes_by_category
+    if params[:category].present?
+      @votes = Vote.category(params[:category])
+    else
+      render json: { message: 'NG' }, status: :forbidden
+    end
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
