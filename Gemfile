@@ -26,7 +26,7 @@ gem 'jquery-rails'
 # gem 'jquery-turbolinks'
 
 # Pjax
-gem 'rack-pjax'
+# gem 'rack-pjax'
 
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder', '~> 1.2'
@@ -55,7 +55,7 @@ gem 'unicorn'
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
-gem 'jpmobile'
+# gem 'jpmobile'
 
 group :test do
   # Pretty printed test output
