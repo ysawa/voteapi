@@ -1,6 +1,6 @@
 class VotesController < ApplicationController
   respond_to :json
-  before_action :set_vote, only: []
+  before_action :set_vote, only: %i(destroy)
   before_action :set_votes_by_category, only: %i(count index ranking)
 
   # GET /votes/count.json
@@ -23,6 +23,12 @@ class VotesController < ApplicationController
         format.json { render json: { errors: @vote.errors, message: 'NG' }, status: :unprocessable_entity }
       end
     end
+  end
+
+  # DELETE /votes/destroy.json
+  def destroy
+    @vote.delete
+    render json: { message: 'OK' }
   end
 
   # GET /votes.json

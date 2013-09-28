@@ -108,4 +108,19 @@ describe VotesController do
       end
     end
   end
+
+  describe "DELETE destroy" do
+    before :each do
+      @vote = Fabricate(:vote, category: 'category', name: 'first')
+    end
+
+    it "fails without category" do
+      lambda { delete :destroy, { id: 'invalid', format: 'json' } }.should raise_error
+    end
+
+    it "assigns all votes as @votes" do
+      delete :destroy, { id: @vote.to_param, format: 'json' }
+      response.should be_success
+    end
+  end
 end
