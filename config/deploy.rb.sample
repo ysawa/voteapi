@@ -1,0 +1,89 @@
+require 'rvm/capistrano'
+
+require 'capistrano_colors'
+
+require "bundler/capistrano"
+
+require 'rvm/capistrano'
+set :rvm_ruby_string, '2.0.0'
+set :rvm_type, :user
+
+set :application, "voteapi"
+set :user, 'username'
+set :keep_releases, 5
+set :scm, :git
+set :repository,  "git://github.com/ysawa/voteapi.git"
+set :branch, "master"
+set :deploy_via, :remote_cache
+set :deploy_to, "/home/#{user}/#{application}"
+set :rails_env, "production"
+set :use_sudo, false
+set :ssh_options, port: "22"
+set :bundle_flags, "--quiet"
+
+role :web, "server"                          # Your HTTP server, Apache/etc
+role :app, "server"                          # This may be the same as your `Web` server
+role :db,  "server", primary: true # This is where Rails migrations will run
+
+set :normalize_asset_timestamps, false
+
+# if you want to clean up old releases on each deploy uncomment this:
+# after "deploy:restart", "deploy:cleanup"
+
+# if you're still using the script/reaper helper you will need
+# these http://github.com/rails/irs_process_scripts
+
+namespace :deploy do
+  task :start, roles: :app, except: { no_release: true } do
+    run "cd #{current_path} && BUNDLE_GEMFILE=#{current_path}/Gemfile bundle exec unicorn_rails -c #{current_path}/config/unicorn.rb -E production -D"
+  end
+
+  task :stop, roles: :app, except: { no_release: true } do
+    pid_file = "#{shared_path}/pids/unicorn.pid"
+    run "kill -KILL -s QUIT `cat #{pid_file}`"
+  end
+
+  task :restart, roles: :app, except: { no_release: true } do
+    pid_file = "#{shared_path}/pids/unicorn.pid"
+    run "kill -KILL -s USR2 `cat #{pid_file}`"
+  end
+
+  task :setup_app_directories, roles: :app, except: { no_release: true } do
+    directories = "#{shared_path}/sockets #{shared_path}/config #{shared_path}/db"
+    run "mkdir -p #{directories}; chmod g+w #{directories}"
+  end
+
+  desc "Symlinks files to configure"
+  task :symlink_config, roles: :app do
+    files = %w(mongoid.yml unicorn.rb)
+    files.each do |file|
+      run "ln -nfs #{shared_path}/config/#{file} #{release_path}/config/#{file}"
+    end
+  end
+
+  namespace :db do
+    desc "Creates seeds"
+    task :seed do
+      run "cd #{current_path}; bundle exec rake db:seed RAILS_ENV=#{rails_env}"
+    end
+
+    desc "Creates indexes"
+    task :create_indexes, roles: :db do
+      run "cd #{current_path} && rake db:mongoid:create_indexes"
+    end
+  end
+end
+after 'deploy:setup', 'deploy:setup_app_directories'
+after 'deploy:update_code', 'deploy:symlink_config'
+
+namespace :assets do
+  task :precompile, roles: :web do
+    run "cd #{release_path} && RAILS_ENV=production bundle exec rake assets:precompile"
+  end
+  task :cleanup, roles: :web do
+    run "cd #{release_path} && RAILS_ENV=production bundle exec rake assets:clean"
+  end
+end
+after 'deploy:update_code', "assets:precompile"
+
+after "deploy:update", "deploy:cleanup"
