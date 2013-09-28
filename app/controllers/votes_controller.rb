@@ -7,7 +7,7 @@ class VotesController < ApplicationController
     @vote = Vote.new(vote_params)
 
     respond_to do |format|
-      if @vote.save
+      if !@vote.suspicious? && @vote.save
         format.json { render action: 'show', status: :created, location: @vote }
       else
         format.json { render json: @vote.errors, status: :unprocessable_entity }

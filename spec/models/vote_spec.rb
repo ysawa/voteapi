@@ -21,7 +21,12 @@ describe Vote do
     end
   end
 
-  describe '#suspicios_vote?' do
+  describe '#suspicious?' do
+
+    it 'returns false if the last vote is blank' do
+      vote = Fabricate.build(:vote, name: 'name2', remote_ip: '192.168.1.10', user_agent: 'bar')
+      vote.suspicious?.should be_false
+    end
 
     it 'checks the last_one' do
       @vote = Fabricate(:vote, name: 'name2', remote_ip: '192.168.1.3', user_agent: 'foo')
