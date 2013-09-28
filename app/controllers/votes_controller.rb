@@ -47,7 +47,7 @@ class VotesController < ApplicationController
     end
     past_ranking = nil
     @ranking.each_with_index do |element, i|
-      if past_ranking == element
+      if past_ranking && past_ranking[:count] == element[:count]
         element[:position] = past_ranking[:position]
       else
         element[:position] = i + 1
