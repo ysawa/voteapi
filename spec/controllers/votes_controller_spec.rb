@@ -33,8 +33,11 @@ describe VotesController do
 
       it "assigns a newly created vote as @vote" do
         post :create, {vote: valid_attributes, format: 'json'}
-        assigns(:vote).should be_a(Vote)
-        assigns(:vote).should be_persisted
+        vote = assigns(:vote)
+        vote.should be_a(Vote)
+        vote.should be_persisted
+        vote.remote_ip.should_not be_blank
+        vote.user_agent.should_not be_blank
       end
     end
 
@@ -43,6 +46,14 @@ describe VotesController do
         # Trigger the behavior that occurs when invalid params are submitted
         Vote.any_instance.stub(:save).and_return(false)
         post :create, {vote: { "category" => "invalid value" }, format: 'json'}
+        assigns(:vote).should be_a_new(Vote)
+      end
+    end
+
+    describe 'forbits the same user' do
+      it "assigns a newly created but unsaved vote as @vote" do
+        post :create, {vote: valid_attributes, format: 'json'}
+        post :create, {vote: valid_attributes, format: 'json'}
         assigns(:vote).should be_a_new(Vote)
       end
     end

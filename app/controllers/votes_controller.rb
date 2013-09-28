@@ -5,6 +5,8 @@ class VotesController < ApplicationController
   # POST /votes.json
   def create
     @vote = Vote.new(vote_params)
+    @vote.remote_ip = request.remote_ip
+    @vote.user_agent = request.env['HTTP_USER_AGENT']
 
     respond_to do |format|
       if !@vote.suspicious? && @vote.save
