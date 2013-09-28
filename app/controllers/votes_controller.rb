@@ -2,7 +2,6 @@ class VotesController < ApplicationController
   respond_to :json
   before_action :set_vote, only: [:show]
 
-  # POST /votes
   # POST /votes.json
   def create
     @vote = Vote.new(vote_params)
@@ -16,13 +15,11 @@ class VotesController < ApplicationController
     end
   end
 
-  # GET /votes
   # GET /votes.json
   def index
     @votes = Vote.all
   end
 
-  # GET /votes/1
   # GET /votes/1.json
   def show
   end
