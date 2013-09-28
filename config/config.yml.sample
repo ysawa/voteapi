@@ -1,0 +1,28 @@
+---
+mail_defaults: &mail_defaults
+  delivery_method: :sendmail
+  smtp_settings:
+    :address: "smtp.gmail.com"
+    :port: 587
+    :domain: 'gmail.com'
+    :user_name: '<username>@gmail.com'
+    :password: '<password>'
+    :authentication: 'plain'
+    :enable_starttls_auto: true
+  sendmail_settings:
+    :location: '/usr/sbin/sendmail'
+    :arguments: '-i -t'
+
+mail:
+  development:
+    <<: *mail_defaults
+
+  production:
+    <<: *mail_defaults
+
+  test:
+    <<: *mail_defaults
+    delivery_method: :test
+
+api:
+  vote_span: 86400

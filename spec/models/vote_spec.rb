@@ -39,13 +39,13 @@ describe Vote do
       @vote = Fabricate(:vote, name: 'name2', remote_ip: '192.168.1.3', user_agent: 'foo')
       vote = @vote.dup
       vote.suspicious?.should be_true
-      @vote.created_at = 1.day.ago + 1.second
+      @vote.created_at = Time.now - Voteapi::VOTE_SPAN + 1.second
       @vote.save
       vote.suspicious?.should be_true
-      @vote.created_at = 1.day.ago - 1.second
+      @vote.created_at = Time.now - Voteapi::VOTE_SPAN - 1.second
       @vote.save
       vote.suspicious?.should be_false
-      @vote.created_at = 2.day.ago
+      @vote.created_at = Time.now - Voteapi::VOTE_SPAN * 2
       @vote.save
       vote.suspicious?.should be_false
     end

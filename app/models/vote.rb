@@ -15,7 +15,7 @@ class Vote
     last_one = Vote.last_one(self.category)
     if last_one.remote_ip == self.remote_ip &&
         last_one.user_agent == self.user_agent &&
-        ((self.created_at || Time.now) - last_one.created_at) < 1.day
+        ((self.created_at || Time.now) - last_one.created_at) < Voteapi::VOTE_SPAN
       return true
     end
     false
