@@ -15,11 +15,20 @@ describe VotesController do
     end
   end
 
-  describe "GET show" do
+  describe "GET ranking" do
+    before :each do
+      @another_vote = Fabricate(:vote, category: 'another')
+      @first_vote = Fabricate(:vote, category: 'category', name: 'first')
+      @second_vote = Fabricate(:vote, category: 'category', name: 'second')
+      @third_vote = Fabricate(:vote, category: 'category', name: 'first')
+    end
+
     it "assigns all votes as @votes" do
-      vote = Vote.create! valid_attributes
-      get :show, { id: vote.to_param, format: 'json' }
-      assigns(:vote).should eq(vote)
+      get :ranking, { category: 'category', format: 'json' }
+      assigns(:votes).should include @first_vote
+      assigns(:votes).should include @second_vote
+      assigns(:votes).should include @third_vote
+      assigns(:votes).should_not include @another_vote
     end
   end
 

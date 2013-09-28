@@ -10,9 +10,5 @@ describe VotesController do
     it "routes to #index" do
       get("/votes").should route_to("votes#index")
     end
-
-    it "routes to #show" do
-      get("/votes/1").should route_to("votes#show", :id => "1")
-    end
   end
 end

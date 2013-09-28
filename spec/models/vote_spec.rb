@@ -56,7 +56,20 @@ describe Vote do
     end
   end
 
-  describe '#last_one' do
+  describe '.category' do
+
+    before :each do
+      @another_vote = Fabricate(:vote, category: 'another')
+      @vote = Fabricate(:vote, category: 'vote')
+    end
+
+    it 'finds the last vote' do
+      Vote.category('vote').to_a.should == [@vote]
+      Vote.category('another').to_a.should == [@another_vote]
+    end
+  end
+
+  describe '.last_one' do
 
     before :each do
       @old_another_vote = Fabricate(:vote, category: 'another', created_at: 2.minutes.ago)

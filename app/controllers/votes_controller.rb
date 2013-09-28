@@ -1,6 +1,6 @@
 class VotesController < ApplicationController
   respond_to :json
-  before_action :set_vote, only: [:show]
+  before_action :set_vote, only: []
 
   # POST /votes.json
   def create
@@ -19,11 +19,16 @@ class VotesController < ApplicationController
 
   # GET /votes.json
   def index
-    @votes = Vote.all
+    if params[:category]
+      @votes = Vote.category(params[:category])
+    else
+      @votes = Vote.all
+    end
   end
 
-  # GET /votes/1.json
-  def show
+  # GET /votes/ranking.json
+  def ranking
+    @votes = Vote.category(params[:category])
   end
 
 private

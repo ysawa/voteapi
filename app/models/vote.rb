@@ -23,9 +23,13 @@ class Vote
   end
 
   class << self
+    def category(category)
+      where(category: category)
+    end
+
     def last_one(category = nil)
       if category.present?
-        criteria = where(category: category)
+        criteria = category(category)
       else
         criteria = self
       end
