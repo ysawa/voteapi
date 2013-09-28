@@ -64,9 +64,10 @@ describe "Votes" do
 
   describe "GET /votes/ranking" do
     before :each do
-      @another_vote = Fabricate(:vote, category: 'another', name: 'first')
-      @first_vote = Fabricate(:vote, category: 'category', name: 'first')
-      @second_vote = Fabricate(:vote, category: 'category', name: 'second')
+      @another_vote = Fabricate(:vote, category: 'another', name: 'another')
+      @first_vote = Fabricate(:vote, category: 'category', name: 'first', created_at: 3.day.ago)
+      @second_vote = Fabricate(:vote, category: 'category', name: 'first', created_at: 2.day.ago)
+      @third_vote = Fabricate(:vote, category: 'category', name: 'second', created_at: 1.day.ago)
     end
 
     it "generates error" do
@@ -80,11 +81,18 @@ describe "Votes" do
       parsed = JSON.parse response.body
       parsed['message'].should == 'OK'
       parsed['ranking'].should be_a Array
-      parsed['ranking'][0]['name'].should == 'name'
+      parsed['ranking'].size.should == 2
+      parsed['ranking'][0]['name'].should == 'first'
+      parsed['ranking'][0]['position'].should == 1
+      parsed['ranking'][0]['count'].should == 2
       get ranking_votes_path(category: 'another', format: :json)
       parsed = JSON.parse response.body
       parsed['message'].should == 'OK'
       parsed['ranking'].should be_a Array
+      parsed['ranking'].size.should == 1
+      parsed['ranking'][0]['name'].should == 'another'
+      parsed['ranking'][0]['position'].should == 1
+      parsed['ranking'][0]['count'].should == 1
     end
   end
 end
