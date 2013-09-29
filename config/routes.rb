@@ -1,6 +1,6 @@
 Voteapi::Application.routes.draw do
 
-  resources :votes, only: %i(create destroy index) do
+  resources :votes, only: %i(create destroy index new) do
     collection do
       get 'count'
       get 'ranking'

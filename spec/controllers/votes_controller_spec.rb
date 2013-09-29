@@ -44,6 +44,18 @@ describe VotesController do
     end
   end
 
+  describe "GET new" do
+
+    it "fails without html format" do
+      lambda { get :new, { format: 'json' } }.should raise_error
+    end
+
+    it "assigns new @vote" do
+      get :new, { format: 'html' }
+      assigns(:vote).should_not be_persisted
+    end
+  end
+
   describe "GET ranking" do
     before :each do
       @another_vote = Fabricate(:vote, category: 'another')

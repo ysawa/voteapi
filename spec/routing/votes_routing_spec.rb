@@ -19,6 +19,10 @@ describe VotesController do
       get("/votes").should route_to("votes#index")
     end
 
+    it "routes to #new" do
+      get("/votes/new").should route_to("votes#new")
+    end
+
     it "routes to #ranking" do
       get("/votes/ranking").should route_to("votes#ranking")
     end

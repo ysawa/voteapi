@@ -1,5 +1,7 @@
 class VotesController < ApplicationController
-  respond_to :json
+  respond_to :json, only: %i(count destroy index ranking)
+  respond_to :html, only: %i(new)
+  skip_before_filter :verify_authenticity_token, only: %i(create destroy)
   before_action :set_vote, only: %i(destroy)
   before_action :set_votes_by_category, only: %i(count index ranking)
 
@@ -36,6 +38,11 @@ class VotesController < ApplicationController
     if params[:name]
       @votes = @votes.of_name(params[:name])
     end
+  end
+
+  # GET /votes/new
+  def new
+    @vote = Vote.new
   end
 
   # GET /votes/ranking.json

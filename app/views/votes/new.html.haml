@@ -1,0 +1,11 @@
+- unless Rails.env.production?
+  = form_for @vote, url: votes_path(format: :json) do |f|
+    .field
+      = f.label :category
+      = f.text_field :category
+    .field
+      = f.label :name
+      = f.text_field :name
+    .actions
+      = f.submit
+
