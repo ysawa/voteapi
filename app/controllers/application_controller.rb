@@ -6,5 +6,6 @@ class ApplicationController < ActionController::Base
 protected
   def allow_remote_hosts
     headers["Access-Control-Allow-Origin"] = "*"
+    headers["Access-Control-Allow-Headers"] = "*"
   end
 end
