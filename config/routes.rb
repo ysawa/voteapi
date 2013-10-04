@@ -4,6 +4,11 @@ Voteapi::Application.routes.draw do
     collection do
       get 'count'
       get 'ranking'
+      get 'add', to: 'votes#create'
+    end
+
+    member do
+      get 'del', to: 'votes#destroy'
     end
   end
 

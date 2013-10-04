@@ -9,10 +9,12 @@ describe VotesController do
 
     it "routes to #create" do
       post("/votes").should route_to("votes#create")
+      get("/votes/add").should route_to("votes#create")
     end
 
     it "routes to #destroy" do
       delete("/votes/1").should route_to("votes#destroy", id: '1')
+      get("/votes/1/del").should route_to("votes#destroy", id: '1')
     end
 
     it "routes to #index" do
