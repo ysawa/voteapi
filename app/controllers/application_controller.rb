@@ -7,5 +7,6 @@ protected
   def allow_remote_hosts
     headers["Access-Control-Allow-Origin"] = "*"
     headers["Access-Control-Allow-Headers"] = "*"
+    headers["Access-Control-Allow-Credentials"] = "true"
   end
 end
