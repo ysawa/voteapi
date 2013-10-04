@@ -5,3 +5,4 @@ json.set! :ranking do
   end
 end
 json.set! :category, params[:category]
+json.set! :callback, params[:callback]

@@ -21,9 +21,9 @@ class VotesController < ApplicationController
 
     respond_to do |format|
       if !@vote.suspicious? && @vote.save
-        format.json { render status: :created }
+        format.json { render status: :created, callback: params[:callback] }
       else
-        format.json { render json: { errors: @vote.errors, message: 'NG' }, status: :unprocessable_entity }
+        format.json { render json: { errors: @vote.errors, message: 'NG' }, status: :unprocessable_entity, callback: params[:callback] }
       end
     end
   end
@@ -31,7 +31,7 @@ class VotesController < ApplicationController
   # DELETE /votes/destroy.json
   def destroy
     @vote.delete
-    render json: { message: 'OK' }
+    render json: { message: 'OK', callback: params[:callback] }
   end
 
   # GET /votes.json
