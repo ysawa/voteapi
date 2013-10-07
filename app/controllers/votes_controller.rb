@@ -1,6 +1,6 @@
 class VotesController < ApplicationController
   respond_to :json, only: %i(count destroy index ranking)
-  respond_to :html, only: %i(new)
+  respond_to :html, only: %i(count new)
   skip_before_filter :verify_authenticity_token, only: %i(create destroy)
   before_action :allow_remote_hosts
   before_action :set_vote, only: %i(destroy)
@@ -10,6 +10,11 @@ class VotesController < ApplicationController
   def count
     if params[:name]
       @votes = @votes.of_name(params[:name])
+    end
+
+    respond_to do |format|
+      format.html { render layout: false }
+      format.json { render }
     end
   end
 
