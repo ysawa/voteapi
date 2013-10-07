@@ -36,10 +36,7 @@ module Voteapi
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif *.svg)
 
     config.action_dispatch.default_headers = {
-      'X-Frame-Options' => 'ALLOWALL',
-      "Access-Control-Allow-Origin" => "*",
-      "Access-Control-Allow-Headers" => "*",
-      "Access-Control-Allow-Credentials" => "true"
+      'X-Frame-Options' => 'ALLOWALL'
     }
 
     config.generators do |g|
