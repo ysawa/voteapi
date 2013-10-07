@@ -25,7 +25,7 @@ class VotesController < ApplicationController
 
     respond_to do |format|
       if !@vote.suspicious? && @vote.save
-        format.json { render status: :created, callback: params[:callback] }
+        format.json { render json: @vote.to_json, status: :created, callback: params[:callback] }
       else
         format.json { render json: { errors: @vote.errors, message: 'NG' }, status: :unprocessable_entity, callback: params[:callback] }
       end
