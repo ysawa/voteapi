@@ -35,6 +35,10 @@ module Voteapi
     end
     config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif *.svg)
 
+    config.action_dispatch.default_headers = {
+      'X-Frame-Options' => 'ALLOWALL'
+    }
+
     config.generators do |g|
       g.test_framework :rspec, fixture: false, views: true, requests: true, routing: true, helpers: true
       g.fixture_replacement :fabrication, dir: 'spec/fabricators'
