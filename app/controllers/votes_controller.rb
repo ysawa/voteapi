@@ -2,7 +2,6 @@ class VotesController < ApplicationController
   respond_to :json, only: %i(count destroy index ranking)
   respond_to :html, only: %i(count new)
   skip_before_filter :verify_authenticity_token, only: %i(create destroy)
-  before_action :allow_remote_hosts
   before_action :set_vote, only: %i(destroy)
   before_action :set_votes_by_category, only: %i(count index ranking)
 
