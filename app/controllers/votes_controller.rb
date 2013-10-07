@@ -26,7 +26,7 @@ class VotesController < ApplicationController
     respond_to do |format|
       if !@vote.suspicious? && @vote.save
         attrs = @vote.attributes
-        attrs['id'] = attrs.delete '_id'
+        attrs['id'] = attrs.delete('_id').to_s
         format.json { render json: { message: "OK", vote: attrs }, status: :created, callback: params[:callback] }
       else
         format.json { render json: { errors: @vote.errors, message: 'NG' }, status: :unprocessable_entity, callback: params[:callback] }
