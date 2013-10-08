@@ -2,5 +2,5 @@
 %html{ style: 'margin: 0; padding: 0; border: 0;'}
   %head
   %body{ style: 'margin: 0; padding: 0; overflow:hidden; border: 0;', scroll: "no" }
-    #votes_count{ style: 'font-size: 10px; overflow: hidden; text-align: center; line-height: 1; height: 10px; width: 100%; cursor: pointer; position: absolute; top: 50%; margin-top: -5px;' }
+    #votes_count{ style: "font-size: #{params[:font_size].present? ? params[:font_size] : '10px' }; overflow: hidden; text-align: center; line-height: 1; height: 10px; width: 100%; cursor: pointer; position: absolute; top: 50%; margin-top: -5px;" }
       = @votes.count
